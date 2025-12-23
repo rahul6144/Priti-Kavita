@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy New Year 2026 | Vidya's Special</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --premium-pink: #ff2d75;
+            --dark-bg: #050505;
+            --glow-color: rgba(255, 45, 117, 0.3);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .cursive { font-family: 'Dancing Script', cursive; }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        header {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 100;
+        }
+
+        #surprise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .premium-card { border-radius: 50px; }
+        }
+
+        .counter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            perspective: 1000px;
+        }
+
+        .digit-wrapper {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 12px;
+            min-width: 70px;
+            flex: 1 1 70px;
+            max-width: 110px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .digit-number {
+            display: block;
+            font-size: clamp(1.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(to bottom, #ffffff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .digit-label {
+            display: block;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--premium-pink);
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .btn-luxe {
+            background: linear-gradient(90deg, #ff2d75, #bc26b4);
+            transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(255, 45, 117, 0.4);
+            cursor: pointer;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        .hidden-content { display: none; opacity: 0; }
+
+        .responsive-hero-text {
+            font-size: clamp(2.5rem, 8vw, 6.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .heart {
+            position: fixed;
+            color: var(--premium-pink);
+            pointer-events: none;
+            z-index: 5;
+            animation: moveUp 4s linear forwards;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .shayari-box {
+            font-style: italic;
+            color: var(--gold);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: clamp(1rem, 3vw, 1.4rem);
+        }
+
+        .premium-footer {
+            background: linear-gradient(to top, #000 0%, transparent 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 1rem;
+            position: relative;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- Audio Element for Fireworks (Royalty Free) -->
+    <audio id="fireworkSound" loop>
+        <source src="https://assets.mixkit.co/active_storage/sfx/2658/2658-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Overlay -->
+    <div id="surprise-overlay">
+        <div class="text-center px-6">
+            <h2 class="cursive text-4xl md:text-7xl mb-8 text-pink-500 animate-pulse">Wait for it, Bestie...</h2>
+            <button onclick="revealSurprise()" class="btn-luxe px-8 py-4 rounded-full text-base font-bold tracking-widest uppercase text-white">
+                Welcome 2026 ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full px-6 py-4 flex justify-between items-center">
+        <div class="text-xl font-serif font-bold tracking-tighter text-white">
+            NY<span class="text-pink-500">2026</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <span class="text-[9px] uppercase tracking-widest text-pink-500 font-bold">By Vidya</span>
+            <div class="h-8 w-8 rounded-full bg-pink-500/20 border border-pink-500/50 flex items-center justify-center text-pink-500">
+                ❤
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main id="main-content" class="hidden-content pt-28 pb-12 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="premium-card p-6 md:p-20 text-center floating">
+                <h4 class="uppercase tracking-[0.4em] text-pink-500 text-[8px] mb-4 font-black">Official Celebration 2026</h4>
+                
+                <!-- New Attractive Shayari -->
+                <div class="shayari-box font-serif">
+                    "Purana saal sabse ho raha hai door,<br>
+                    Kya karein yahi hai kudrat ka dastoor,<br>
+                    Biti yaadein sochkar udas na hona tum,<br>
+                    Naya saal aaya hai chalo machayein dhoom!"
+                </div>
+
+                <h1 class="font-serif responsive-hero-text text-white">Happy</h1>
+                <h1 class="font-serif responsive-hero-text text-pink-500 italic">New Year 2026</h1>
+                
+                <div id="countdown-section" class="counter-container my-10">
+                    <div class="digit-wrapper">
+                        <span id="days" class="digit-number">00</span>
+                        <span class="digit-label">Days</span>
+                    </div>
+                    <div class="digit-wrapper">
+                        <span id="hours" class="digit-number">00</span>
+                        <span class="digit-label">Hours</span>
+                    </div>
+                    <div class="digit-wrapper">
+                        <span id="minutes" class="digit-number">00</span>
+                        <span class="digit-label">Mins</span>
+                    </div>
+                    <div class="digit-wrapper">
+                        <span id="seconds" class="digit-number text-pink-500" style="-webkit-text-fill-color: #ff2d75;">00</span>
+                        <span class="digit-label">Secs</span>
+                    </div>
+                </div>
+
+                <div id="message-section" class="mt-12 pt-10 border-t border-white/5">
+                    <p class="cursive text-3xl md:text-5xl text-pink-500 mb-6">Meri Pyari Dost,</p>
+                    <p id="typed-text" class="text-sm md:text-xl text-gray-300 font-light leading-relaxed max-w-2xl mx-auto italic min-h-[80px]">
+                        <!-- Typed Content -->
+                    </p>
+                    <div class="mt-10">
+                        <div class="w-12 h-[1px] bg-pink-500/50 mx-auto mb-3"></div>
+                        <p class="font-serif italic text-2xl text-pink-500">Vidya</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="moments" class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="premium-card p-6 text-center">
+                    <div class="text-2xl mb-2">✨</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Naye Khwab</p>
+                </div>
+                <div class="premium-card p-6 text-center">
+                    <div class="text-2xl mb-2">💖</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Sacchi Dosti</p>
+                </div>
+                <div class="premium-card p-6 text-center">
+                    <div class="text-2xl mb-2">⭐</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Badi Kamiyabi</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="premium-footer text-center">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="font-serif text-2xl italic tracking-[0.1em] mb-6">Shine Bright 2026</h2>
+            <p class="text-[8px] uppercase tracking-[0.4em] text-gray-600">
+                Handcrafted with Love &copy; 2026 | Designed by Vidya
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        const audio = document.getElementById('fireworkSound');
+        let particles = [];
+        let animationFrame;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function updateCountdown() {
+            const now = new Date();
+            const targetDate = new Date(`January 1, 2026 00:00:00`);
+            const diff = targetDate - now;
+            const finalDiff = diff > 0 ? diff : (new Date(`January 1, 2027 00:00:00`) - now);
+
+            const d = Math.floor(finalDiff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((finalDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((finalDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((finalDiff % (1000 * 60)) / 1000);
+
+            if(document.getElementById('days')) {
+                document.getElementById('days').innerText = d.toString().padStart(2, '0');
+                document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+                document.getElementById('minutes').innerText = m.toString().padStart(2, '0');
+                document.getElementById('seconds').innerText = s.toString().padStart(2, '0');
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function revealSurprise() {
+            const overlay = document.getElementById('surprise-overlay');
+            const content = document.getElementById('main-content');
+            
+            // Start Audio
+            audio.play().catch(e => console.log("Audio needs user interaction first"));
+            
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                content.style.display = 'block';
+                setTimeout(() => {
+                    content.style.opacity = '1';
+                    startFireworks();
+                    typeMessage();
+                    startHeartRain();
+                }, 50);
+            }, 1000);
+        }
+
+        const message = "Naya saal 2026, nayi umeedien, aur wahi purani humari dosti! Main khush-naseeb hoon ki meri zindagi mein tum ho. Ye saal tumhare liye dher saari khushiyan aur success laye. Tum mere liye bohot special ho, hamesha khush rehna!";
+        let idx = 0;
+        function typeMessage() {
+            const el = document.getElementById('typed-text');
+            if (idx < message.length) {
+                el.innerHTML += message.charAt(idx);
+                idx++;
+                setTimeout(typeMessage, 40);
+            }
+        }
+
+        function startHeartRain() {
+            setInterval(() => {
+                if(document.hidden) return;
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = Math.random() > 0.5 ? '❤' : '✨';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 700);
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                this.velocity = { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed };
+                this.alpha = 1; this.gravity = 0.12;
+            }
+            draw() {
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
+                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2); ctx.fillStyle = this.color;
+                ctx.fill(); ctx.restore();
+            }
+            update() {
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x; this.y += this.velocity.y;
+                this.alpha -= 0.015;
+            }
+        }
+
+        function createExplosion(e) {
+            const x = e ? (e.clientX || (e.touches ? e.touches[0].clientX : 0)) : Math.random() * canvas.width;
+            const y = e ? (e.clientY || (e.touches ? e.touches[0].clientY : 0)) : Math.random() * (canvas.height * 0.4);
+            const hue = Math.random() * 360;
+            const color = `hsl(${hue}, 100%, 65%)`;
+            for (let i = 0; i < 40; i++) particles.push(new Particle(x, y, color));
+        }
+
+        function startFireworks() {
+            function loop() {
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                particles = particles.filter(p => p.alpha > 0);
+                particles.forEach(p => { p.update(); p.draw(); });
+                if (Math.random() < 0.05) createExplosion();
+                animationFrame = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        window.addEventListener('mousedown', createExplosion);
+        window.addEventListener('touchstart', (e) => {
+            if(document.getElementById('surprise-overlay').style.display === 'none') {
+                createExplosion(e);
+            }
+        });
+    </script>
+</body>
+</html>
